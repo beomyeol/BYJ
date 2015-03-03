@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8)
-project (util)
+project (byj)
 
-set(LIBRARY_NAME util)
+set(LIBRARY_NAME byj)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
