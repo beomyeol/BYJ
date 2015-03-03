@@ -3,7 +3,6 @@
 using namespace byj;
 
 thread::~thread() {
-    join();
 }
 
 void thread::start() {
