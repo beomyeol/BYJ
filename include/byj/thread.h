@@ -6,7 +6,6 @@
 namespace byj {
     class thread {
     public:
-        thread();
         virtual ~thread();
 
         virtual void run() = 0;
