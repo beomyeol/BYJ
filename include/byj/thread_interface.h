@@ -4,16 +4,17 @@
 #include <thread>
 
 namespace byj {
-    class thread {
+    class thread_interface {
     public:
-        virtual ~thread();
-
-        virtual void run() = 0;
+        virtual ~thread_interface();
 
         void start();
         void join();
         void detach();
         bool joinable() const;
+
+    protected:
+        virtual void run() = 0;
 
     private:
         std::thread thread_;
