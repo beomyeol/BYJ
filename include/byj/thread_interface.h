@@ -1,5 +1,5 @@
-#ifndef __UTIL_THREAD__
-#define __UTIL_THREAD__
+#ifndef __BYJ_THREAD__
+#define __BYJ_THREAD__
 
 #include <thread>
 
