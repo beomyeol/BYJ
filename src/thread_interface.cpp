@@ -2,21 +2,21 @@
 
 using namespace byj;
 
-thread_interface::~thread_interface() {
+ThreadInterface::~ThreadInterface() {
 }
 
-void thread_interface::start() {
-    thread_ = std::thread(&thread_interface::run, this);
+void ThreadInterface::start() {
+    thread_ = boost::thread(&ThreadInterface::run, this);
 }
 
-void thread_interface::join() {
+void ThreadInterface::join() {
     thread_.join();
 }
 
-void thread_interface::detach() {
+void ThreadInterface::detach() {
     thread_.detach();
 }
 
-bool thread_interface::joinable() const {
+bool ThreadInterface::joinable() const {
     return thread_.joinable();
 }
