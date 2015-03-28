@@ -2,7 +2,7 @@
 #define __BYJ_NET_LISTEN_SERVER__
 
 #include "../thread_interface.h"
-#include "Config.h"
+#include "config.h"
 #include "incoming_socket.h"
 #include <tbb/concurrent_vector.h>
 #include <vector>
