@@ -1,7 +1,7 @@
 #ifndef __BYJ_NET_NETCONTROLLER__
 #define __BYJ_NET_NETCONTROLLER__
 
-#include "Config.h"
+#include "config.h"
 #include "boost/shared_ptr.hpp"
 #include "boost/thread/mutex.hpp"
 #include "tbb/concurrent_vector.h"
