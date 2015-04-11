@@ -19,7 +19,6 @@ using namespace byj;
 NetController::NetController(boost::shared_ptr<Config> conf)
 : conf_(conf)
 , listener_(conf, insocks_)
-, insocks_(conf->get_num_of_processes())
 , outsocks_(conf->get_num_of_processes()) {
     listener_.start();
 }
