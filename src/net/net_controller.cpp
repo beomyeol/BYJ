@@ -1,4 +1,4 @@
-#include "byj/net/netcontroller.h"
+#include "byj/net/net_controller.h"
 #include "boost/thread/lock_guard.hpp"
 #include <stdexcept> // std::runtime_error
 #include "boost/format.hpp"
