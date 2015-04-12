@@ -43,3 +43,6 @@ install_manifest.txt
 
 # Vim
 *.swp
+
+# Ctags
+.tags
