@@ -45,6 +45,19 @@ void ListenServer::run() {
         close(sock_);
         return;
     }
+
+    if (port_ == 0) {
+        sockaddr_in sin;
+        socklen_t sin_len;
+        if (getsockname(sock_, (struct sockaddr*)&sin, &sin_len) < 0) {
+            int err = errno;
+            conf_->get_logger()->log(Logger::FATAL, 
+                    (boost::format("Failed to get a randomly assigned port err=%s [%s:%d]") % strerror(err) % __FILE__ % __LINE__).str());
+            throw SocketError("Failed to get a randomly assigned port", err);
+        } else {
+            port_ = ntohs(sin.sin_port);
+        }
+    }
     
     if (listen(sock_, 10) < 0) {
         conf_->get_logger()->log(Logger::FATAL, (boost::format("Failed to listen [%s]") % strerror(errno)).str());
