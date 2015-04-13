@@ -21,7 +21,7 @@ public:
     INFO = 2
   };
 
-  Logger(log_level level, std::ostream& os = std::cout);
+  Logger(log_level level = FATAL, std::ostream& os = std::cout);
 
   void log(log_level type, const std::string& log_str);
 
