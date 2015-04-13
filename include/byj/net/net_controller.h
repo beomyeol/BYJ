@@ -25,6 +25,9 @@ public:
     bool send_message(int procid, const Message& msg);
     void shutdown();
 
+    bool is_listening() const;
+    unsigned short get_listening_port() const;
+
 private:
     bool init_outgoing_conn(int procid);
 

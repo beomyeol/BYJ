@@ -126,6 +126,15 @@ void NetController::shutdown() {
     }
 }
 
+bool NetController::is_listening() const {
+    return (!listener_.is_stopped());
+}
+
+unsigned short NetController::get_listening_port() const {
+    assert(is_listening());
+    return listener_.get_port();
+}
+
 bool NetController::init_outgoing_conn(int procid) {
     // Not using lock_guard intentionally to avoid deadlock
     // Expects that the mutex has already been locked
