@@ -45,6 +45,12 @@ void ListenServer::run() {
         close(sock_);
         return;
     }
+    
+    if (listen(sock_, 10) < 0) {
+        conf_->get_logger()->log(Logger::FATAL, (boost::format("Failed to listen [%s]") % strerror(errno)).str());
+        close(sock_);
+        return;
+    }
 
     if (port_ == 0) {
         sockaddr_in sin;
@@ -57,12 +63,6 @@ void ListenServer::run() {
         } else {
             port_ = ntohs(sin.sin_port);
         }
-    }
-    
-    if (listen(sock_, 10) < 0) {
-        conf_->get_logger()->log(Logger::FATAL, (boost::format("Failed to listen [%s]") % strerror(errno)).str());
-        close(sock_);
-        return;
     }
 
     stop_flag_ = false;
