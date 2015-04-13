@@ -24,7 +24,7 @@ void ListenServer::run() {
     sockaddr_in server_addr;
 
     sock_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if(sock_ < 0) {
+    if (sock_ < 0) {
         conf_->get_logger()->log(Logger::FATAL, (boost::format("Failed to open socket [%s]") % strerror(errno)).str());
         return;
     }
@@ -40,13 +40,13 @@ void ListenServer::run() {
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(port_);
 
-    if(bind(sock_, (const struct sockaddr*) &server_addr, sizeof(server_addr)) < 0) {
+    if (bind(sock_, (const struct sockaddr*) &server_addr, sizeof(server_addr)) < 0) {
         conf_->get_logger()->log(Logger::FATAL, (boost::format("Failed to bind socket [%s]") % strerror(errno)).str());
         close(sock_);
         return;
     }
     
-    if(listen(sock_, 10) < 0) {
+    if (listen(sock_, 10) < 0) {
         conf_->get_logger()->log(Logger::FATAL, (boost::format("Failed to listen [%s]") % strerror(errno)).str());
         close(sock_);
         return;
@@ -58,10 +58,10 @@ void ListenServer::run() {
     socklen_t client_len = sizeof(client_addr);
     int connfd;
 
-    while(!stop_flag_) {
+    while (!stop_flag_) {
         connfd = accept(sock_, (struct sockaddr*) &client_addr, &client_len);
-        if(connfd < 0) {
-            if(!is_stopped()) {
+        if (connfd < 0) {
+            if (!is_stopped()) {
                 conf_->get_logger()->log(Logger::WARNING, (boost::format("Failed to accept [%s]") % strerror(errno)).str());
             }
             break;
@@ -78,7 +78,7 @@ void ListenServer::run() {
 }
 
 void ListenServer::cleanshutdown() {
-    if(!stop_flag_) {
+    if (!stop_flag_) {
         stop_flag_ = true;
         close(sock_);
     }
