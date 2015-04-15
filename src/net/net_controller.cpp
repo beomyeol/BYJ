@@ -50,11 +50,9 @@ bool NetController::get_recv_message(Message& out) {
     for(InsocketSptrs::iterator iter = insocks_.begin();
         iter != insocks_.end();
         ++iter) {
-        if (iter->get() == NULL) {
-            // Dead socket
-            continue;
-        } else {
-            return (*iter)->get_message(out);
+        // Not dead socket and succeed to get a message
+        if (iter->get() != NULL && (*iter)->get_message(out)) {
+            return true;
         }
     }
     
