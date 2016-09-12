@@ -1,7 +1,7 @@
-#include "byj/logger.h"
+#include "bamboo/logger.h"
 #include <sstream>
 
-using namespace byj;
+using namespace bamboo;
 
 Logger::Logger(log_level level, std::ostream& os)
 : os_ (os)
@@ -10,8 +10,8 @@ Logger::Logger(log_level level, std::ostream& os)
 
 void Logger::log(log_level level, const std::string& log_str) {
   if(level <= level_) {
-    os_ << log_str << std::endl;
-    flush();
+  os_ << log_str << std::endl;
+  flush();
   }
 }
 

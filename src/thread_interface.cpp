@@ -1,22 +1,22 @@
-#include "byj/thread_interface.h"
+#include "bamboo/thread_interface.h"
 
-using namespace byj;
+using namespace bamboo;
 
 ThreadInterface::~ThreadInterface() {
 }
 
 void ThreadInterface::start() {
-    thread_ = boost::thread(&ThreadInterface::run, this);
+  thread_ = boost::thread(&ThreadInterface::run, this);
 }
 
 void ThreadInterface::join() {
-    thread_.join();
+  thread_.join();
 }
 
 void ThreadInterface::detach() {
-    thread_.detach();
+  thread_.detach();
 }
 
 bool ThreadInterface::joinable() const {
-    return thread_.joinable();
+  return thread_.joinable();
 }

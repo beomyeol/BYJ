@@ -6,7 +6,7 @@
 
 #include "boost/lexical_cast.hpp"
 
-namespace byj {
+namespace bamboo {
 
 template<typename Source>
 std::string to_string(const Source& arg) {
@@ -16,9 +16,9 @@ std::string to_string(const Source& arg) {
 class Logger {
 public:
   enum log_level {
-    FATAL = 0,
-    WARNING = 1,
-    INFO = 2
+  FATAL = 0,
+  WARNING = 1,
+  INFO = 2
   };
 
   Logger(log_level level = FATAL, std::ostream& os = std::cout);
