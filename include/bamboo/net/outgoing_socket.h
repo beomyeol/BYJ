@@ -1,8 +1,9 @@
-#ifndef __BAMBOO_NET_OUTGOING_SOCKET__
-#define __BAMBOO_NET_OUTGOING_SOCKET__
+#ifndef BAMBOO_NET_OUTGOING_SOCKET_H
+#define BAMBOO_NET_OUTGOING_SOCKET_H
 
-#include "socket_error.h"
-#include "boost/thread/mutex.hpp"
+#include <mutex>
+
+#include "bamboo/net/socket_error.h"
 
 namespace bamboo {
 
@@ -17,7 +18,7 @@ public:
 private:
   const static char MSG_SEP = '&';
   int sock_;
-  boost::mutex mtx_;
+  std::mutex mtx_;
 };
 
 }

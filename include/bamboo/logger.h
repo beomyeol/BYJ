@@ -1,5 +1,5 @@
-#ifndef __LOGGER__
-#define __LOGGER__
+#ifndef BAMBOO_LOGGER_H
+#define BAMBOO_LOGGER_H
 
 #include <fstream>
 #include <iostream>

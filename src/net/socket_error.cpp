@@ -1,6 +1,8 @@
 #include "bamboo/net/socket_error.h"
+
+#include <cstring>
+
 #include <sstream>
-#include <string.h>
 
 using namespace bamboo;
 

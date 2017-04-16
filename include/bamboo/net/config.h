@@ -1,11 +1,13 @@
-#ifndef __BAMBOO_NET_CONFIG__
-#define __BAMBOO_NET_CONFIG__
+#ifndef BAMBOO_NET_CONFIG_H
+#define BAMBOO_NET_CONFIG_H
+
+#include <cassert>
 
 #include <vector>
 #include <string>
-#include <cassert>
-#include "../logger.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
+
+#include "bamboo/logger.h"
 
 namespace bamboo {
 
@@ -20,7 +22,7 @@ public:
   void set_num_of_processes(int num_of_processes);
 
   typedef std::vector<unsigned short> Ports;
-  
+
   const Ports& get_ports() const;
   void set_ports(const Ports& ports);
 
@@ -29,15 +31,15 @@ public:
   const Addresses& get_addresses() const;
   void set_addresses(const Addresses& addresses);
 
-  boost::shared_ptr<Logger> get_logger() const;
-  void set_logger(boost::shared_ptr<Logger> logger);
+  std::shared_ptr<Logger> get_logger() const;
+  void set_logger(std::shared_ptr<Logger> logger);
 
 private:
   int id_;
   int num_of_processes_;
   Ports ports_;
   Addresses addresses_;
-  boost::shared_ptr<Logger> logger_;
+  std::shared_ptr<Logger> logger_;
 };
 
 }

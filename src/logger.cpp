@@ -1,4 +1,5 @@
 #include "bamboo/logger.h"
+
 #include <sstream>
 
 using namespace bamboo;

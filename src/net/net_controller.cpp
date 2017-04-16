@@ -1,10 +1,6 @@
 #include "bamboo/net/net_controller.h"
-#include "boost/thread/lock_guard.hpp"
+
 #include <stdexcept> // std::runtime_error
-#include "boost/format.hpp"
-#include "boost/make_shared.hpp"
-#include "boost/archive/text_iarchive.hpp"
-#include "boost/archive/text_oarchive.hpp"
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
@@ -12,11 +8,16 @@
 #include <sstream>
 #include <string>
 #include <csignal>
+
+#include "boost/format.hpp"
+#include "boost/archive/text_iarchive.hpp"
+#include "boost/archive/text_oarchive.hpp"
+
 #include "bamboo/logger.h"
 
 using namespace bamboo;
 
-NetController::NetController(boost::shared_ptr<Config> conf)
+NetController::NetController(std::shared_ptr<Config> conf)
 : conf_(conf)
 , listener_(conf, insocks_)
 , outsocks_(conf->get_num_of_processes()) {
@@ -24,10 +25,10 @@ NetController::NetController(boost::shared_ptr<Config> conf)
 }
 
 NetController::Messages NetController::get_recv_messages() {
-  boost::lock_guard<boost::mutex> lock(mtx_);
+  std::lock_guard<std::mutex> lock(mtx_);
   Messages total_msgs;
 
-  for(InsocketSptrs::iterator iter = insocks_.begin();
+  for(IncomingSocketSptrs::iterator iter = insocks_.begin();
     iter != insocks_.end();
     ++iter) {
     if (iter->get() == NULL) {
@@ -43,11 +44,11 @@ NetController::Messages NetController::get_recv_messages() {
 }
 
 bool NetController::get_recv_message(Message& out) {
-  boost::lock_guard<boost::mutex> lock(mtx_);
+  std::lock_guard<std::mutex> lock(mtx_);
 
   std::string strmsg;
 
-  for(InsocketSptrs::iterator iter = insocks_.begin();
+  for(IncomingSocketSptrs::iterator iter = insocks_.begin();
     iter != insocks_.end();
     ++iter) {
     // Not dead socket and succeed to get a message
@@ -55,7 +56,7 @@ bool NetController::get_recv_message(Message& out) {
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -68,7 +69,7 @@ bool NetController::send_message(int procid, const Message& msg) {
     msg_str = oss.str();
   }
 
-  boost::lock_guard<boost::mutex> lock(mtx_);
+  std::lock_guard<std::mutex> lock(mtx_);
 
   if (outsocks_[procid].get() == NULL) {
     if (init_outgoing_conn(procid) == false) {
@@ -93,21 +94,23 @@ bool NetController::send_message(int procid, const Message& msg) {
           outsocks_[procid]->cleanshutdown();
           outsocks_[procid].reset();
         }
-        conf_->get_logger()->log(Logger::WARNING, (boost::format("Failed to send message to %d [%s]") % procid % e.what()).str());
+        conf_->get_logger()->log(Logger::WARNING, (boost::format(
+            "Failed to send message to %d [%s]") % procid % e.what()).str());
         return false;
       }
       return true;
     }
-    conf_->get_logger()->log(Logger::WARNING, (boost::format("Failed to send message to %d [%s]") % procid % e.what()).str());
+    conf_->get_logger()->log(Logger::WARNING, (boost::format(
+        "Failed to send message to %d [%s]") % procid % e.what()).str());
     return false;
   }
   return true;
 }
 
 void NetController::shutdown() {
-  boost::lock_guard<boost::mutex> lock(mtx_);
+  std::lock_guard<std::mutex> lock(mtx_);
   listener_.cleanshutdown();
-  for (InsocketSptrs::iterator iter = insocks_.begin();
+  for (IncomingSocketSptrs::iterator iter = insocks_.begin();
     iter != insocks_.end();
     ++iter) {
     if (iter->get() != NULL) {
@@ -115,7 +118,7 @@ void NetController::shutdown() {
     }
   }
 
-  for (OutsocketSptrs::iterator iter = outsocks_.begin();
+  for (OutgoingSocketSptrs::iterator iter = outsocks_.begin();
     iter != outsocks_.end();
     ++iter) {
     if (iter->get() != NULL) {
@@ -138,7 +141,8 @@ bool NetController::init_outgoing_conn(int procid) {
   // Expects that the mutex has already been locked
 
   if (outsocks_[procid].get() != NULL) {
-    throw std::runtime_error((boost::format("outgoing socket of proc %d is not null")).str());
+    throw std::runtime_error(
+        (boost::format("outgoing socket of proc %d is not null")).str());
   }
 
   // create and connect outgoing socket to procid
@@ -150,7 +154,8 @@ bool NetController::init_outgoing_conn(int procid) {
 
   int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (sock < 0) {
-    conf_->get_logger()->log(Logger::WARNING, std::string("Failed to create socket [") + strerror(errno) + "]");
+    conf_->get_logger()->log(Logger::WARNING,
+        std::string("Failed to create socket [") + strerror(errno) + "]");
     return false;
   }
 
@@ -161,9 +166,11 @@ bool NetController::init_outgoing_conn(int procid) {
   }
 
   // succeed to create and connect socket
-  outsocks_[procid] = boost::make_shared<OutgoingSocket>(sock);
+  outsocks_[procid] = std::make_shared<OutgoingSocket>(sock);
 
-  conf_->get_logger()->log(Logger::INFO, (boost::format("Server[%d]: socket to %d established") % conf_->get_id() % procid).str());
+  conf_->get_logger()->log(Logger::INFO, (boost::format(
+      "Server[%d]: socket to %d established") % conf_->get_id() % procid)
+          .str());
 
   return true;
 }

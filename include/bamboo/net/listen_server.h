@@ -1,21 +1,23 @@
-#ifndef __BAMBOO_NET_LISTEN_SERVER__
-#define __BAMBOO_NET_LISTEN_SERVER__
+#ifndef BAMBOO_NET_LISTEN_SERVER_H
+#define BAMBOO_NET_LISTEN_SERVER_H
 
-#include "../thread_interface.h"
-#include "config.h"
-#include "incoming_socket.h"
-#include <tbb/concurrent_vector.h>
 #include <vector>
 #include <memory>
+
+#include <tbb/concurrent_vector.h>
+
+#include "bamboo/thread_interface.h"
+#include "bamboo/net/config.h"
+#include "bamboo/net/incoming_socket.h"
 
 namespace bamboo {
 
 class ListenServer : public ThreadInterface {
 public:
-  typedef boost::shared_ptr<IncomingSocket> insocket_sptr_type;
-  typedef tbb::concurrent_vector<insocket_sptr_type> insocket_sptrs_type;
+  typedef std::shared_ptr<IncomingSocket> IncomingSocketSptr;
+  typedef tbb::concurrent_vector<IncomingSocketSptr> IncomingSocketSptrs;
 
-  ListenServer(boost::shared_ptr<Config> conf, insocket_sptrs_type& insocks);
+  ListenServer(std::shared_ptr<Config> conf, IncomingSocketSptrs& insocks);
   ~ListenServer();
 
   virtual void run();
@@ -26,8 +28,8 @@ public:
 
 private:
   volatile bool stop_flag_;
-  boost::shared_ptr<Config> conf_;
-  insocket_sptrs_type& insocks_;
+  std::shared_ptr<Config> conf_;
+  IncomingSocketSptrs& insocks_;
   int sock_;
   unsigned short port_;
 };

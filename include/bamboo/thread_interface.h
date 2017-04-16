@@ -1,7 +1,7 @@
-#ifndef __BAMBOO_THREAD__
-#define __BAMBOO_THREAD__
+#ifndef BAMBOO_THREAD_INTERFACE_H
+#define BAMBOO_THREAD_INTERFACE_H
 
-#include "boost/thread.hpp"
+#include <thread>
 
 namespace bamboo {
 
@@ -18,7 +18,7 @@ protected:
   virtual void run() = 0;
 
 private:
-  boost::thread thread_;
+  std::thread thread_;
 };
 
 }

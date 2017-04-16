@@ -1,21 +1,23 @@
-#ifndef __BAMBOO_NET_NETCONTROLLER__
-#define __BAMBOO_NET_NETCONTROLLER__
+#ifndef BAMBOO_NET_NETCONTROLLER_H
+#define BAMBOO_NET_NETCONTROLLER_H
 
-#include "config.h"
-#include "boost/shared_ptr.hpp"
-#include "boost/thread/mutex.hpp"
-#include "tbb/concurrent_vector.h"
-#include "incoming_socket.h"
-#include "outgoing_socket.h"
-#include "listen_server.h"
 #include <list>
 #include <vector>
+#include <memory>
+#include <mutex>
+
+#include "tbb/concurrent_vector.h"
+
+#include "bamboo/net/config.h"
+#include "bamboo/net/incoming_socket.h"
+#include "bamboo/net/outgoing_socket.h"
+#include "bamboo/net/listen_server.h"
 
 namespace bamboo {
 
 class NetController {
 public:
-  NetController(boost::shared_ptr<Config> conf);
+  NetController(std::shared_ptr<Config> conf);
 
   typedef std::string Message;
   typedef std::list<Message> Messages;
@@ -31,17 +33,17 @@ public:
 private:
   bool init_outgoing_conn(int procid);
 
-  boost::shared_ptr<Config> conf_;
-  boost::mutex mtx_;
+  std::shared_ptr<Config> conf_;
+  std::mutex mtx_;
   ListenServer listener_;
 
-  typedef boost::shared_ptr<IncomingSocket> InsocketSptr;
-  typedef tbb::concurrent_vector<InsocketSptr> InsocketSptrs;
-  InsocketSptrs insocks_;
+  typedef std::shared_ptr<IncomingSocket> IncomingSocketStpr;
+  typedef tbb::concurrent_vector<IncomingSocketStpr> IncomingSocketSptrs;
+  IncomingSocketSptrs insocks_;
 
-  typedef boost::shared_ptr<OutgoingSocket> OutsocketSptr;
-  typedef std::vector<OutsocketSptr> OutsocketSptrs;
-  OutsocketSptrs outsocks_;
+  typedef std::shared_ptr<OutgoingSocket> OutgoingSocketSptr;
+  typedef std::vector<OutgoingSocketSptr> OutgoingSocketSptrs;
+  OutgoingSocketSptrs outsocks_;
 };
 
 }

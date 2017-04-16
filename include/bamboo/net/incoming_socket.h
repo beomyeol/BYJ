@@ -1,11 +1,13 @@
-#ifndef __BAMBOO_NET_INCOMING_SOCKET__
-#define __BAMBOO_NET_INCOMING_SOCKET__
+#ifndef BAMBOO_NET_INCOMING_SOCKET_H
+#define BAMBOO_NET_INCOMING_SOCKET_H
 
-#include "tbb/concurrent_queue.h"
-#include "buffered_socket_reader.h"
-#include "../thread_interface.h"
 #include <string>
 #include <list>
+
+#include <tbb/concurrent_queue.h>
+
+#include "bamboo/net/buffered_socket_reader.h"
+#include "bamboo/thread_interface.h"
 
 namespace bamboo {
 

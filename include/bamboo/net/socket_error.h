@@ -1,5 +1,5 @@
-#ifndef __BAMBOO_NET_SOCKET_ERROR__
-#define __BAMBOO_NET_SOCKET_ERROR__
+#ifndef BAMBOO_NET_SOCKET_ERROR_H
+#define BAMBOO_NET_SOCKET_ERROR_H
 
 #include <exception>
 #include <string>

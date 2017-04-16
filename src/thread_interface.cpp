@@ -6,7 +6,7 @@ ThreadInterface::~ThreadInterface() {
 }
 
 void ThreadInterface::start() {
-  thread_ = boost::thread(&ThreadInterface::run, this);
+  thread_ = std::thread(&ThreadInterface::run, this);
 }
 
 void ThreadInterface::join() {
