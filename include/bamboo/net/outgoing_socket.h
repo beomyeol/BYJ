@@ -1,5 +1,5 @@
-#ifndef BAMBOO_NET_OUTGOING_SOCKET_H
-#define BAMBOO_NET_OUTGOING_SOCKET_H
+#ifndef __BAMBOO_NET_OUTGOING_SOCKET__
+#define __BAMBOO_NET_OUTGOING_SOCKET__
 
 #include <mutex>
 
@@ -8,19 +8,19 @@
 namespace bamboo {
 
 class OutgoingSocket {
-public:
+ public:
   OutgoingSocket(int sock);
 
   void send_message(const std::string& msg);
 
   void cleanshutdown();
 
-private:
+ private:
   const static char MSG_SEP = '&';
   int sock_;
   std::mutex mtx_;
 };
 
-}
+}  // namespace bamboo
 
 #endif

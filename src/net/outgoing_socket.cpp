@@ -2,18 +2,16 @@
 
 #include <sys/socket.h>
 #include <unistd.h>
-#include <cerrno>
-
 #include <algorithm>
+#include <cerrno>
 #include <iterator>
 #include <vector>
 
-using namespace bamboo;
+namespace bamboo {
 
 const char OutgoingSocket::MSG_SEP;
 
-OutgoingSocket::OutgoingSocket(int sock)
-: sock_(sock) {
+OutgoingSocket::OutgoingSocket(int sock) : sock_(sock) {
   ::shutdown(sock, SHUT_RD);
 }
 
@@ -46,3 +44,5 @@ void OutgoingSocket::cleanshutdown() {
   ::shutdown(sock_, SHUT_WR);
   close(sock_);
 }
+
+}  // namespace bamboo

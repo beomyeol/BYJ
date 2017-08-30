@@ -1,10 +1,9 @@
-#ifndef BAMBOO_NET_INCOMING_SOCKET_H
-#define BAMBOO_NET_INCOMING_SOCKET_H
-
-#include <string>
-#include <list>
+#ifndef __BAMBOO_NET_INCOMING_SOCKET__
+#define __BAMBOO_NET_INCOMING_SOCKET__
 
 #include <tbb/concurrent_queue.h>
+#include <list>
+#include <string>
 
 #include "bamboo/net/buffered_socket_reader.h"
 #include "bamboo/thread_interface.h"
@@ -12,7 +11,7 @@
 namespace bamboo {
 
 class IncomingSocket : public ThreadInterface {
-public:
+ public:
   IncomingSocket(int sock);
   virtual ~IncomingSocket();
 
@@ -21,11 +20,11 @@ public:
   void cleanshutdown();
   bool is_stopped() const;
 
-protected:
+ protected:
   void shutdown();
   virtual void run();
 
-private:
+ private:
   const static char MSG_SEP = '&';
   int sock_;
   BufferedSocketReader reader_;
@@ -34,6 +33,6 @@ private:
   std::size_t bytes_last_checked;
 };
 
-}
+}  // namespace bamboo
 
 #endif

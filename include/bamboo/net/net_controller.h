@@ -1,22 +1,21 @@
-#ifndef BAMBOO_NET_NETCONTROLLER_H
-#define BAMBOO_NET_NETCONTROLLER_H
+#ifndef __BAMBOO_NET_NETCONTROLLER__
+#define __BAMBOO_NET_NETCONTROLLER__
 
+#include <tbb/concurrent_vector.h>
 #include <list>
-#include <vector>
 #include <memory>
 #include <mutex>
-
-#include "tbb/concurrent_vector.h"
+#include <vector>
 
 #include "bamboo/net/config.h"
 #include "bamboo/net/incoming_socket.h"
-#include "bamboo/net/outgoing_socket.h"
 #include "bamboo/net/listen_server.h"
+#include "bamboo/net/outgoing_socket.h"
 
 namespace bamboo {
 
 class NetController {
-public:
+ public:
   NetController(std::shared_ptr<Config> conf);
 
   typedef std::string Message;
@@ -30,7 +29,7 @@ public:
   bool is_listening() const;
   unsigned short get_listening_port() const;
 
-private:
+ private:
   bool init_outgoing_conn(int procid);
 
   std::shared_ptr<Config> conf_;
@@ -46,6 +45,6 @@ private:
   OutgoingSocketSptrs outsocks_;
 };
 
-}
+}  // namespace bamboo
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef BAMBOO_LOGGER_H
-#define BAMBOO_LOGGER_H
+#ifndef __BAMBOO_LOGGER__
+#define __BAMBOO_LOGGER__
 
 #include <fstream>
 #include <iostream>
@@ -8,18 +8,14 @@
 
 namespace bamboo {
 
-template<typename Source>
+template <typename Source>
 std::string to_string(const Source& arg) {
   return boost::lexical_cast<std::string>(arg);
 }
 
 class Logger {
-public:
-  enum log_level {
-  FATAL = 0,
-  WARNING = 1,
-  INFO = 2
-  };
+ public:
+  enum log_level { FATAL = 0, WARNING = 1, INFO = 2 };
 
   Logger(log_level level = FATAL, std::ostream& os = std::cout);
 
@@ -27,11 +23,11 @@ public:
 
   void flush();
 
-private:
+ private:
   std::ostream& os_;
   log_level level_;
 };
 
-}
+}  // namespace bamboo
 
 #endif

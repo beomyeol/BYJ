@@ -3,24 +3,19 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <vector>
 #include <algorithm>
+#include <vector>
 
-using namespace bamboo;
+namespace bamboo {
 
 const char IncomingSocket::MSG_SEP;
 
 IncomingSocket::IncomingSocket(int sock)
-: sock_ (sock)
-, reader_ (sock)
-, stop_flag_ (false)
-, bytes_last_checked (0) {
+    : sock_(sock), reader_(sock), stop_flag_(false), bytes_last_checked(0) {
   ::shutdown(sock, SHUT_WR);
 }
 
-IncomingSocket::~IncomingSocket() {
-
-}
+IncomingSocket::~IncomingSocket() {}
 
 std::list<std::string> IncomingSocket::get_messages() {
   std::list<std::string> retval;
@@ -40,13 +35,14 @@ void IncomingSocket::run() {
     try {
       std::size_t available = reader_.available();
       if (available == bytes_last_checked) {
-        usleep(10000); // 10 ms
+        usleep(10000);  // 10 ms
       } else {
         std::vector<char> buffer;
         buffer.resize(available);
         reader_.read(&buffer[0], buffer.size(), 0);
         std::vector<char>::iterator msg_begin = buffer.begin();
-        std::vector<char>::iterator msg_end = std::find(msg_begin, buffer.end(), MSG_SEP);
+        std::vector<char>::iterator msg_end =
+            std::find(msg_begin, buffer.end(), MSG_SEP);
         while (msg_end != buffer.end()) {
           queue_.push(std::string(msg_begin, msg_end));
           msg_begin = ++msg_end;
@@ -59,20 +55,17 @@ void IncomingSocket::run() {
     } catch (SocketError const& e) {
       cleanshutdown();
     }
-
   }
   shutdown();
 }
 
-void IncomingSocket::cleanshutdown() {
-  stop_flag_ = true;
-}
+void IncomingSocket::cleanshutdown() { stop_flag_ = true; }
 
 void IncomingSocket::shutdown() {
   ::shutdown(sock_, SHUT_RD);
   close(sock_);
 }
 
-bool IncomingSocket::is_stopped() const {
-  return stop_flag_;
-}
+bool IncomingSocket::is_stopped() const { return stop_flag_; }
+
+}  // namespace bamboo

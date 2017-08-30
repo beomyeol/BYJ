@@ -1,22 +1,17 @@
 #include "bamboo/thread_interface.h"
 
-using namespace bamboo;
+namespace bamboo {
 
-ThreadInterface::~ThreadInterface() {
-}
+ThreadInterface::~ThreadInterface() {}
 
 void ThreadInterface::start() {
   thread_ = std::thread(&ThreadInterface::run, this);
 }
 
-void ThreadInterface::join() {
-  thread_.join();
-}
+void ThreadInterface::join() { thread_.join(); }
 
-void ThreadInterface::detach() {
-  thread_.detach();
-}
+void ThreadInterface::detach() { thread_.detach(); }
 
-bool ThreadInterface::joinable() const {
-  return thread_.joinable();
-}
+bool ThreadInterface::joinable() const { return thread_.joinable(); }
+
+}  // namespace bamboo

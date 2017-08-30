@@ -1,13 +1,13 @@
-#ifndef BAMBOO_BLOCKING_DEQUE_H
-#define BAMBOO_BLOCKING_DEQUE_H
+#ifndef __BAMBOO_BLOCKING_DEQUE__
+#define __BAMBOO_BLOCKING_DEQUE__
 
+#include <condition_variable>
 #include <deque>
 #include <mutex>
-#include <condition_variable>
 
 namespace bamboo {
 
-template<typename T>
+template <typename T>
 class BlockingDeque {
  public:
   void push_front(const T& value);
@@ -25,7 +25,7 @@ class BlockingDeque {
   std::deque<T> queue_;
 };
 
-template<typename T>
+template <typename T>
 void BlockingDeque<T>::push_front(const T& value) {
   {
     std::lock_guard<std::mutex> lock(mutex_);
@@ -34,7 +34,7 @@ void BlockingDeque<T>::push_front(const T& value) {
   cond_.notify_one();
 }
 
-template<typename T>
+template <typename T>
 void BlockingDeque<T>::push_back(const T& value) {
   {
     std::lock_guard<std::mutex> lock(mutex_);
@@ -43,30 +43,30 @@ void BlockingDeque<T>::push_back(const T& value) {
   cond_.notify_one();
 }
 
-template<typename T>
+template <typename T>
 T BlockingDeque<T>::pop_front() {
   std::unique_lock<std::mutex> lock(mutex_);
-  cond_.wait(lock, [this](){ return !queue_.empty(); });
+  cond_.wait(lock, [this]() { return !queue_.empty(); });
   T value(std::move(queue_.front()));
   queue_.pop_front();
   return value;
 }
 
-template<typename T>
+template <typename T>
 T BlockingDeque<T>::pop_back() {
   std::unique_lock<std::mutex> lock(mutex_);
-  cond_.wait(lock, [this](){ return !queue_.empty(); });
+  cond_.wait(lock, [this]() { return !queue_.empty(); });
   T value(std::move(queue_.back()));
   queue_.pop_back();
   return value;
 }
 
-template<typename T>
+template <typename T>
 std::size_t BlockingDeque<T>::size() {
   std::lock_guard<std::mutex> lock(mutex_);
   return queue_.size();
 }
 
-} // namespace bamboo
+}  // namespace bamboo
 
-#endif //BAMBOO_BLOCKING_DEQUE_H
+#endif  // BAMBOO_BLOCKING_DEQUE_H

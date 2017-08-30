@@ -1,10 +1,9 @@
 #include "bamboo/net/socket_error.h"
 
 #include <cstring>
-
 #include <sstream>
 
-using namespace bamboo;
+namespace bamboo {
 
 SocketError::SocketError(const char* msg, int err) {
   std::ostringstream oss;
@@ -12,9 +11,8 @@ SocketError::SocketError(const char* msg, int err) {
   msg_ = oss.str();
 }
 
-SocketError::~SocketError() throw() {
-}
+SocketError::~SocketError() throw() {}
 
-const char* SocketError::what() const throw() {
-  return msg_.c_str();
-}
+const char* SocketError::what() const throw() { return msg_.c_str(); }
+
+}  // namespace bamboo

@@ -6,7 +6,7 @@
 namespace bamboo {
 
 class BufferedSocketReader {
-public:
+ public:
   BufferedSocketReader(int sock, std::size_t buffer_size = 8192);
   ~BufferedSocketReader();
 
@@ -15,7 +15,7 @@ public:
   std::size_t available();
   int skip(std::size_t size);
 
-private:
+ private:
   std::size_t nblock_recv();
 
   int sock_;
@@ -24,6 +24,6 @@ private:
   std::size_t buffer_size_;
 };
 
-}
+}  // namespace bamboo
 
 #endif

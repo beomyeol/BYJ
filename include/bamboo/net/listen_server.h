@@ -1,19 +1,18 @@
-#ifndef BAMBOO_NET_LISTEN_SERVER_H
-#define BAMBOO_NET_LISTEN_SERVER_H
-
-#include <vector>
-#include <memory>
+#ifndef __BAMBOO_NET_LISTEN_SERVER__
+#define __BAMBOO_NET_LISTEN_SERVER__
 
 #include <tbb/concurrent_vector.h>
+#include <memory>
+#include <vector>
 
-#include "bamboo/thread_interface.h"
 #include "bamboo/net/config.h"
 #include "bamboo/net/incoming_socket.h"
+#include "bamboo/thread_interface.h"
 
 namespace bamboo {
 
 class ListenServer : public ThreadInterface {
-public:
+ public:
   typedef std::shared_ptr<IncomingSocket> IncomingSocketSptr;
   typedef tbb::concurrent_vector<IncomingSocketSptr> IncomingSocketSptrs;
 
@@ -26,7 +25,7 @@ public:
 
   unsigned short get_port() const;
 
-private:
+ private:
   volatile bool stop_flag_;
   std::shared_ptr<Config> conf_;
   IncomingSocketSptrs& insocks_;
@@ -34,6 +33,6 @@ private:
   unsigned short port_;
 };
 
-}
+}  // namespace bamboo
 
 #endif
