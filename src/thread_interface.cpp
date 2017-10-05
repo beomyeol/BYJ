@@ -4,14 +4,14 @@ namespace bamboo {
 
 ThreadInterface::~ThreadInterface() {}
 
-void ThreadInterface::start() {
-  thread_ = std::thread(&ThreadInterface::run, this);
+void ThreadInterface::Start() {
+  thread_ = std::thread(&ThreadInterface::Run, this);
 }
 
-void ThreadInterface::join() { thread_.join(); }
+void ThreadInterface::Join() { thread_.join(); }
 
-void ThreadInterface::detach() { thread_.detach(); }
+void ThreadInterface::Detach() { thread_.detach(); }
 
-bool ThreadInterface::joinable() const { return thread_.joinable(); }
+bool ThreadInterface::Joinable() const { return thread_.joinable(); }
 
 }  // namespace bamboo

@@ -1,5 +1,5 @@
-#ifndef __BAMBOO_THREAD_INTERFACE__
-#define __BAMBOO_THREAD_INTERFACE__
+#ifndef BAMBOO_THREAD_INTERFACE_H_
+#define BAMBOO_THREAD_INTERFACE_H_
 
 #include <thread>
 
@@ -9,13 +9,13 @@ class ThreadInterface {
  public:
   virtual ~ThreadInterface();
 
-  void start();
-  void join();
-  void detach();
-  bool joinable() const;
+  void Start();
+  void Join();
+  void Detach();
+  bool Joinable() const;
 
  protected:
-  virtual void run() = 0;
+  virtual void Run() = 0;
 
  private:
   std::thread thread_;
@@ -23,4 +23,4 @@ class ThreadInterface {
 
 }  // namespace bamboo
 
-#endif
+#endif  // BAMBOO_THREAD_INTERFACE_H_
