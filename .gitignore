@@ -46,3 +46,6 @@ install_manifest.txt
 
 # Ctags
 .tags
+
+# Compilation database
+compile_commands.json
