@@ -1,5 +1,5 @@
-#ifndef __BAMBOO_NET_NETCONTROLLER__
-#define __BAMBOO_NET_NETCONTROLLER__
+#ifndef BAMBOO_NET_NETCONTROLLER_H_
+#define BAMBOO_NET_NETCONTROLLER_H_
 
 #include <tbb/concurrent_vector.h>
 #include <list>
@@ -47,4 +47,4 @@ class NetController {
 
 }  // namespace bamboo
 
-#endif
+#endif  // BAMBOO_NET_NETCONTROLLER_H_

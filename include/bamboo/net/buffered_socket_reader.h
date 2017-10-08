@@ -10,16 +10,16 @@ class BufferedSocketReader {
   BufferedSocketReader(int sock, std::size_t buffer_size = 8192);
   ~BufferedSocketReader();
 
-  int read(char* buffer, std::size_t buffer_size, std::size_t offset = 0);
+  int Read(char* buffer, std::size_t buffer_size, std::size_t offset = 0);
 
-  std::size_t available();
-  int skip(std::size_t size);
+  std::size_t BytesAvailable();
+  int Skip(std::size_t size);
 
  private:
-  std::size_t nblock_recv();
+  std::size_t NonBlockRecv();
 
-  int sock_;
-  std::size_t available_;
+  const int sock_;
+  std::size_t bytes_available_;
   char* buffer_;
   std::size_t buffer_size_;
 };

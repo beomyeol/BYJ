@@ -1,5 +1,5 @@
-#ifndef __BAMBOO_NET_OUTGOING_SOCKET__
-#define __BAMBOO_NET_OUTGOING_SOCKET__
+#ifndef BAMBOO_NET_OUTGOING_SOCKET_H_
+#define BAMBOO_NET_OUTGOING_SOCKET_H_
 
 #include <mutex>
 
@@ -16,8 +16,7 @@ class OutgoingSocket {
   void cleanshutdown();
 
  private:
-  const static char MSG_SEP = '&';
-  int sock_;
+  const int sock_;
   std::mutex mtx_;
 };
 

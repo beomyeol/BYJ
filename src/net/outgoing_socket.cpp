@@ -2,14 +2,15 @@
 
 #include <sys/socket.h>
 #include <unistd.h>
+
 #include <algorithm>
 #include <cerrno>
+#include <cstdint>
 #include <iterator>
 #include <vector>
+#include <memory>
 
 namespace bamboo {
-
-const char OutgoingSocket::MSG_SEP;
 
 OutgoingSocket::OutgoingSocket(int sock) : sock_(sock) {
   ::shutdown(sock, SHUT_RD);
@@ -18,8 +19,14 @@ OutgoingSocket::OutgoingSocket(int sock) : sock_(sock) {
 void OutgoingSocket::send_message(const std::string& msg) {
   std::lock_guard<std::mutex> lock(mtx_);
 
-  std::vector<char> send_buffer(msg.begin(), msg.end());
-  send_buffer.push_back(MSG_SEP);
+  int32_t length = msg.size();
+  std::vector<char> send_buffer(sizeof(int32_t) + length);
+
+  char* length_begin = reinterpret_cast<char*>(std::addressof(length));
+  char* length_end = length_begin + sizeof(int32_t);
+  std::copy(length_begin, length_end, send_buffer.begin());
+
+  std::copy(msg.begin(), msg.end(), send_buffer.begin() + sizeof(int32_t));
 
   int written_bytes = 0;
   int current_written_bytes = 0;

@@ -4,14 +4,13 @@
 #include <unistd.h>
 
 #include <algorithm>
+#include <cstdint>
 #include <vector>
 
 namespace bamboo {
 
-const char IncomingSocket::MSG_SEP;
-
 IncomingSocket::IncomingSocket(int sock)
-    : sock_(sock), reader_(sock), stop_flag_(false), bytes_last_checked(0) {
+    : sock_(sock), reader_(sock), stop_flag_(false), bytes_last_checked_(0) {
   ::shutdown(sock, SHUT_WR);
 }
 
@@ -33,24 +32,25 @@ bool IncomingSocket::get_message(std::string& out) {
 void IncomingSocket::Run() {
   while (!stop_flag_) {
     try {
-      std::size_t available = reader_.available();
-      if (available == bytes_last_checked) {
+      std::size_t available = reader_.BytesAvailable();
+      if (available < sizeof(int32_t) || available == bytes_last_checked_) {
         usleep(10000);  // 10 ms
       } else {
-        std::vector<char> buffer;
-        buffer.resize(available);
-        reader_.read(&buffer[0], buffer.size(), 0);
-        std::vector<char>::iterator msg_begin = buffer.begin();
-        std::vector<char>::iterator msg_end =
-            std::find(msg_begin, buffer.end(), MSG_SEP);
-        while (msg_end != buffer.end()) {
-          queue_.push(std::string(msg_begin, msg_end));
-          msg_begin = ++msg_end;
-          msg_end = std::find(msg_begin, buffer.end(), MSG_SEP);
+        // Read size
+        int32_t len;
+        reader_.Read(reinterpret_cast<char*>(std::addressof(len)),
+                     sizeof(int32_t));
+        std::size_t msg_bytes = sizeof(int32_t) + len;
+        if (available < msg_bytes) {
+          continue;
         }
-        std::size_t readbytes = std::distance(buffer.begin(), msg_begin);
-        reader_.skip(readbytes);
-        bytes_last_checked = available - readbytes;
+        // Read content
+        std::vector<char> buffer;
+        buffer.resize(len);
+        reader_.Read(&buffer[0], buffer.size(), sizeof(int32_t));
+        queue_.push(std::string(buffer.begin(), buffer.end()));
+        reader_.Skip(msg_bytes);
+        bytes_last_checked_ = available - msg_bytes;
       }
     } catch (SocketError const& e) {
       cleanshutdown();

@@ -1,5 +1,5 @@
-#ifndef __BAMBOO_NET_LISTEN_SERVER__
-#define __BAMBOO_NET_LISTEN_SERVER__
+#ifndef BAMBOO_NET_LISTEN_SERVER_H_
+#define BAMBOO_NET_LISTEN_SERVER_H_
 
 #include <tbb/concurrent_vector.h>
 #include <memory>
@@ -35,4 +35,4 @@ class ListenServer : public ThreadInterface {
 
 }  // namespace bamboo
 
-#endif
+#endif  // BAMBOO_NET_LISTEN_SERVER_H_

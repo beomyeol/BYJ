@@ -25,12 +25,11 @@ class IncomingSocket : public ThreadInterface {
   virtual void Run();
 
  private:
-  const static char MSG_SEP = '&';
   int sock_;
   BufferedSocketReader reader_;
   volatile bool stop_flag_;
   tbb::concurrent_queue<std::string> queue_;
-  std::size_t bytes_last_checked;
+  std::size_t bytes_last_checked_;
 };
 
 }  // namespace bamboo

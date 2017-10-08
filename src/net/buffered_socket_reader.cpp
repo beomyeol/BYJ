@@ -10,7 +10,7 @@
 namespace bamboo {
 
 BufferedSocketReader::BufferedSocketReader(int sock, std::size_t buffer_size)
-    : sock_(sock), available_(0), buffer_size_(buffer_size) {
+    : sock_(sock), bytes_available_(0), buffer_size_(buffer_size) {
   buffer_ = new char[buffer_size];
   // set non-blocking flag
   fcntl(sock_, F_SETFL, fcntl(sock_, F_GETFL) | O_NONBLOCK);
@@ -18,33 +18,34 @@ BufferedSocketReader::BufferedSocketReader(int sock, std::size_t buffer_size)
 
 BufferedSocketReader::~BufferedSocketReader() { delete[] buffer_; }
 
-int BufferedSocketReader::read(char* buffer, std::size_t buffer_size,
+int BufferedSocketReader::Read(char* buffer, std::size_t buffer_size,
                                std::size_t offset) {
   std::size_t i;
-  for (i = 0; (i < buffer_size) && (offset + i) < available_; ++i) {
+  for (i = 0; (i < buffer_size) && (offset + i) < bytes_available_; ++i) {
     buffer[i] = buffer_[offset + i];
   }
   return i;
 }
 
-std::size_t BufferedSocketReader::available() {
-  nblock_recv();
-  return available_;
+std::size_t BufferedSocketReader::BytesAvailable() {
+  NonBlockRecv();
+  return bytes_available_;
 }
 
 // skip n bytes.
 // return: actual skipped bytes
-int BufferedSocketReader::skip(std::size_t size) {
+int BufferedSocketReader::Skip(std::size_t size) {
   int actual_skipped_size;
   actual_skipped_size = (size > buffer_size_) ? buffer_size_ : size;
   memmove(buffer_, buffer_ + actual_skipped_size,
           buffer_size_ - actual_skipped_size);
-  available_ -= actual_skipped_size;
+  bytes_available_ -= actual_skipped_size;
   return actual_skipped_size;
 }
 
-std::size_t BufferedSocketReader::nblock_recv() {
-  int len = recv(sock_, buffer_ + available_, buffer_size_ - available_, 0);
+std::size_t BufferedSocketReader::NonBlockRecv() {
+  int len = recv(sock_, buffer_ + bytes_available_,
+                 buffer_size_ - bytes_available_, 0);
   int err = errno;
   if (len < 0) {
     if (!(err == EAGAIN || err == EWOULDBLOCK)) {
@@ -53,7 +54,7 @@ std::size_t BufferedSocketReader::nblock_recv() {
   } else if (len == 0) {
     throw SocketError("Connection closed", 0);
   } else {
-    available_ += len;
+    bytes_available_ += len;
   }
   return len;
 }

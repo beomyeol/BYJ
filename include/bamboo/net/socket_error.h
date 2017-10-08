@@ -1,5 +1,5 @@
-#ifndef __BAMBOO_NET_SOCKET_ERROR__
-#define __BAMBOO_NET_SOCKET_ERROR__
+#ifndef BAMBOO_NET_SOCKET_ERROR_H_
+#define BAMBOO_NET_SOCKET_ERROR_H_
 
 #include <exception>
 #include <string>
@@ -17,4 +17,5 @@ class SocketError : public std::exception {
 };
 
 }  // namespace bamboo
-#endif
+
+#endif  // BAMBOO_NET_SOCKET_ERROR_H_
