@@ -11,7 +11,7 @@ LogMessage::LogMessage(const char* file, int line, const char* func)
     : stream_(std::cerr) {
   std::time_t t = std::time(nullptr);
   stream_ << std::put_time(std::localtime(&t), "%F %T ") << "[" << func
-          << " in " << file << ":" << line << "] ";
+          << "() in " << file << ":" << line << "] ";
 }
 
 LogMessage::~LogMessage() {
@@ -21,18 +21,18 @@ LogMessage::~LogMessage() {
 
 LogMessageInfo::LogMessageInfo(const char* file, int line, const char* func)
     : LogMessage(file, line, func) {
-  stream() << "INFO: ";
+  stream() << "(INFO) ";
 }
 
 LogMessageWarning::LogMessageWarning(const char* file, int line,
                                      const char* func)
     : LogMessage(file, line, func) {
-  stream() << "WARNING: ";
+  stream() << "(WARNING) ";
 }
 
 LogMessageFatal::LogMessageFatal(const char* file, int line, const char* func)
     : LogMessage(file, line, func) {
-  stream() << "FATAL: ";
+  stream() << "(FATAL) ";
 }
 
 LogMessageFatal::~LogMessageFatal() {
