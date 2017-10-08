@@ -10,6 +10,9 @@
   bamboo::LogMessageWarning(__FILE__, __LINE__, __func__).stream()
 #define LOG_INFO bamboo::LogMessageInfo(__FILE__, __LINE__, __func__).stream()
 
+#define CHECK(cond) \
+  if (!(cond)) LOG_FATAL << "Check Failed: " #cond << " "
+
 namespace bamboo {
 
 class LogMessage {
