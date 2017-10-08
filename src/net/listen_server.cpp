@@ -3,10 +3,9 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <boost/format.hpp>
 #include <cstring>
 
-#include "bamboo/logger.h"
+#include "bamboo/log.h"
 
 namespace bamboo {
 
@@ -19,25 +18,20 @@ ListenServer::ListenServer(std::shared_ptr<Config> conf,
 
 ListenServer::~ListenServer() { cleanshutdown(); }
 
-void ListenServer::run() {
+void ListenServer::Run() {
   sockaddr_in server_addr;
 
   sock_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (sock_ < 0) {
-    conf_->get_logger()->log(
-        Logger::FATAL,
-        (boost::format("Failed to open socket [%s]") % strerror(errno)).str());
+    LOG(FATAL) << "Failed to open socket [" << strerror(errno) << "]";
     return;
   }
 
   int optval = 1;
   if (setsockopt(sock_, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) <
       0) {
-    conf_->get_logger()->log(
-        Logger::FATAL,
-        (boost::format("Failed to set SO_REUSEADDR option [%s]") %
-         strerror(errno))
-            .str());
+    LOG(FATAL) << "Failed to set SO_REUSEADDR option [" << strerror(errno)
+               << "]";
     close(sock_);
     return;
   }
@@ -48,17 +42,13 @@ void ListenServer::run() {
 
   if (bind(sock_, (const struct sockaddr*)&server_addr, sizeof(server_addr)) <
       0) {
-    conf_->get_logger()->log(
-        Logger::FATAL,
-        (boost::format("Failed to bind socket [%s]") % strerror(errno)).str());
+    LOG(FATAL) << "Failed to bind socket [" << strerror(errno) << "]";
     close(sock_);
     return;
   }
 
   if (listen(sock_, 10) < 0) {
-    conf_->get_logger()->log(
-        Logger::FATAL,
-        (boost::format("Failed to listen [%s]") % strerror(errno)).str());
+    LOG(FATAL) << "Failed to listen [" << strerror(errno) << "]";
     close(sock_);
     return;
   }
@@ -68,12 +58,8 @@ void ListenServer::run() {
     socklen_t sin_len;
     if (getsockname(sock_, (struct sockaddr*)&sin, &sin_len) < 0) {
       int err = errno;
-      conf_->get_logger()->log(
-          Logger::FATAL,
-          (boost::format(
-               "Failed to get a randomly assigned port err=%s [%s:%d]") %
-           strerror(err) % __FILE__ % __LINE__)
-              .str());
+      LOG(FATAL) << "Failed to get a randomly assigned port err="
+                 << strerror(err);
       throw SocketError("Failed to get a randomly assigned port", err);
     } else {
       port_ = ntohs(sin.sin_port);
@@ -90,16 +76,14 @@ void ListenServer::run() {
     connfd = accept(sock_, (struct sockaddr*)&client_addr, &client_len);
     if (connfd < 0) {
       if (!is_stopped()) {
-        conf_->get_logger()->log(
-            Logger::WARNING,
-            (boost::format("Failed to accept [%s]") % strerror(errno)).str());
+        LOG(WARNING) << "Failed to accept [" << strerror(errno) << "]";
       }
       break;
     } else {
       IncomingSocketSptr insock = std::make_shared<IncomingSocket>(connfd);
       insocks_.push_back(insock);
-      insock->start();
-      conf_->get_logger()->log(Logger::INFO, "Recv connection");
+      insock->Start();
+      LOG(INFO) << "Recv connection";
     }
   }
 

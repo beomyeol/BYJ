@@ -22,8 +22,4 @@ void Config::set_addresses(const Addresses& addresses) {
   addresses_ = addresses;
 }
 
-std::shared_ptr<Logger> Config::get_logger() const { return logger_; }
-
-void Config::set_logger(std::shared_ptr<Logger> logger) { logger_ = logger; }
-
 }  // namespace bamboo

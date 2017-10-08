@@ -12,7 +12,7 @@
 #include <stdexcept>  // std::runtime_error
 #include <string>
 
-#include "bamboo/logger.h"
+#include "bamboo/log.h"
 
 namespace bamboo {
 
@@ -20,7 +20,7 @@ NetController::NetController(std::shared_ptr<Config> conf)
     : conf_(conf),
       listener_(conf, insocks_),
       outsocks_(conf->get_num_of_processes()) {
-  listener_.start();
+  listener_.Start();
 }
 
 NetController::Messages NetController::get_recv_messages() {
@@ -91,19 +91,14 @@ bool NetController::send_message(int procid, const Message& msg) {
           outsocks_[procid]->cleanshutdown();
           outsocks_[procid].reset();
         }
-        conf_->get_logger()->log(
-            Logger::WARNING,
-            (boost::format("Failed to send message to %d [%s]") % procid %
-             e.what())
-                .str());
+        LOG(WARNING) << "Failed to send message to " << procid << "["
+                     << e.what() << "]";
         return false;
       }
       return true;
     }
-    conf_->get_logger()->log(
-        Logger::WARNING,
-        (boost::format("Failed to send message to %d [%s]") % procid % e.what())
-            .str());
+    LOG(WARNING) << "Failed to send message to " << procid << "[" << e.what()
+                 << "]";
     return false;
   }
   return true;
@@ -152,14 +147,12 @@ bool NetController::init_outgoing_conn(int procid) {
 
   int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (sock < 0) {
-    conf_->get_logger()->log(
-        Logger::WARNING,
-        std::string("Failed to create socket [") + strerror(errno) + "]");
+    LOG(WARNING) << "Failed to create socket [" << strerror(errno) << "]";
     return false;
   }
 
   if (connect(sock, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
-    // conf_->get_logger()->log(Logger::WARNING, (boost::format("Failed to
+    // conf_->get_logger()->Log(Logger::WARNING, (boost::format("Failed to
     // connect to %d [%s]") % procid % strerror(errno)).str());
     close(sock);
     return false;
@@ -168,11 +161,8 @@ bool NetController::init_outgoing_conn(int procid) {
   // succeed to create and connect socket
   outsocks_[procid] = std::make_shared<OutgoingSocket>(sock);
 
-  conf_->get_logger()->log(
-      Logger::INFO, (boost::format("Server[%d]: socket to %d established") %
-                     conf_->get_id() % procid)
-                        .str());
-
+  LOG(INFO) << "Server[" << conf_->get_id() << "]: socket to " << procid
+            << " established";
   return true;
 }
 

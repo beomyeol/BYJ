@@ -1,5 +1,5 @@
-#ifndef __BAMBOO_NET_BUFFERED_SOCKET_READER__
-#define __BAMBOO_NET_BUFFERED_SOCKET_READER__
+#ifndef BAMBOO_NET_BUFFERED_SOCKET_READER_H_
+#define BAMBOO_NET_BUFFERED_SOCKET_READER_H_
 
 #include "socket_error.h"
 
@@ -26,4 +26,4 @@ class BufferedSocketReader {
 
 }  // namespace bamboo
 
-#endif
+#endif  // BAMBOO_NET_BUFFERED_SOCKET_READER_H_

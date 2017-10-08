@@ -1,5 +1,5 @@
-#ifndef __BAMBOO_NET_INCOMING_SOCKET__
-#define __BAMBOO_NET_INCOMING_SOCKET__
+#ifndef BAMBOO_NET_INCOMING_SOCKET_H_
+#define BAMBOO_NET_INCOMING_SOCKET_H_
 
 #include <tbb/concurrent_queue.h>
 #include <list>
@@ -21,8 +21,8 @@ class IncomingSocket : public ThreadInterface {
   bool is_stopped() const;
 
  protected:
-  void shutdown();
-  virtual void run();
+  void Shutdown();
+  virtual void Run();
 
  private:
   const static char MSG_SEP = '&';
@@ -35,4 +35,4 @@ class IncomingSocket : public ThreadInterface {
 
 }  // namespace bamboo
 
-#endif
+#endif  // BAMBOO_NET_INCOMING_SOCKET_H_

@@ -19,7 +19,7 @@ class ListenServer : public ThreadInterface {
   ListenServer(std::shared_ptr<Config> conf, IncomingSocketSptrs& insocks);
   ~ListenServer();
 
-  virtual void run();
+  virtual void Run();
   bool is_stopped() const;
   void cleanshutdown();
 

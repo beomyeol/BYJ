@@ -1,12 +1,10 @@
-#ifndef __BAMBOO_NET_CONFIG__
-#define __BAMBOO_NET_CONFIG__
+#ifndef BAMBOO_NET_CONFIG_H_
+#define BAMBOO_NET_CONFIG_H_
 
 #include <cassert>
 #include <memory>
 #include <string>
 #include <vector>
-
-#include "bamboo/logger.h"
 
 namespace bamboo {
 
@@ -30,17 +28,13 @@ class Config {
   const Addresses& get_addresses() const;
   void set_addresses(const Addresses& addresses);
 
-  std::shared_ptr<Logger> get_logger() const;
-  void set_logger(std::shared_ptr<Logger> logger);
-
  private:
   int id_;
   int num_of_processes_;
   Ports ports_;
   Addresses addresses_;
-  std::shared_ptr<Logger> logger_;
 };
 
 }  // namespace bamboo
 
-#endif
+#endif  // BAMBOO_NET_CONFIG_H_

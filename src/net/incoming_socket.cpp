@@ -30,7 +30,7 @@ bool IncomingSocket::get_message(std::string& out) {
   return queue_.try_pop(out);
 }
 
-void IncomingSocket::run() {
+void IncomingSocket::Run() {
   while (!stop_flag_) {
     try {
       std::size_t available = reader_.available();
@@ -56,12 +56,12 @@ void IncomingSocket::run() {
       cleanshutdown();
     }
   }
-  shutdown();
+  Shutdown();
 }
 
 void IncomingSocket::cleanshutdown() { stop_flag_ = true; }
 
-void IncomingSocket::shutdown() {
+void IncomingSocket::Shutdown() {
   ::shutdown(sock_, SHUT_RD);
   close(sock_);
 }
