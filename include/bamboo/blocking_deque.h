@@ -30,7 +30,7 @@ template <typename T>
 void BlockingDeque<T>::PushFront(const T& value) {
   {
     std::lock_guard<std::mutex> lock(mutex_);
-    queue_.PushFront(value);
+    queue_.push_front(value);
   }
   cond_.notify_one();
 }
@@ -39,7 +39,7 @@ template <typename T>
 void BlockingDeque<T>::PushFront(T&& value) {
   {
     std::lock_guard<std::mutex> lock(mutex_);
-    queue_.PushFront(std::move(value));
+    queue_.push_front(std::move(value));
   }
   cond_.notify_one();
 }
@@ -48,7 +48,7 @@ template <typename T>
 void BlockingDeque<T>::PushBack(const T& value) {
   {
     std::lock_guard<std::mutex> lock(mutex_);
-    queue_.PushBack(value);
+    queue_.push_back(value);
   }
   cond_.notify_one();
 }
@@ -57,7 +57,7 @@ template <typename T>
 void BlockingDeque<T>::PushBack(T&& value) {
   {
     std::lock_guard<std::mutex> lock(mutex_);
-    queue_.PushBack(std::move(value));
+    queue_.push_back(std::move(value));
   }
   cond_.notify_one();
 }
@@ -67,7 +67,7 @@ T BlockingDeque<T>::PopFront() {
   std::unique_lock<std::mutex> lock(mutex_);
   cond_.wait(lock, [this]() { return !queue_.empty(); });
   T value(std::move(queue_.front()));
-  queue_.PopFront();
+  queue_.pop_front();
   return value;
 }
 
@@ -76,7 +76,7 @@ T BlockingDeque<T>::PopBack() {
   std::unique_lock<std::mutex> lock(mutex_);
   cond_.wait(lock, [this]() { return !queue_.empty(); });
   T value(std::move(queue_.back()));
-  queue_.PopBack();
+  queue_.pop_back();
   return value;
 }
 
